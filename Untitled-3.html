@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>سجل الحضور والانصراف</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 20px;
+        }
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+            background: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+            overflow: hidden;
+        }
+        th, td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: center;
+        }
+        th {
+            background-color: #007bff;
+            color: white;
+        }
+        tr:hover {
+            background-color: #f1f1f1;
+        }
+        button {
+            padding: 10px 15px;
+            margin: 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button.download {
+            background-color: #28a745;
+            color: white;
+        }
+        button.download:hover {
+            background-color: #218838;
+        }
+        button.logout {
+            background-color: red;
+            color: white;
+        }
+        button.logout:hover {
+            background-color: darkred;
+        }
+    </style>
+</head>
+<body>
+    <h2>سجل الحضور والانصراف</h2>
+    <button class="download" onclick="downloadExcel()">تحميل Excel</button>
+    <button class="logout" onclick="logout()">تسجيل الخروج</button>
+    
+    <table>
+        <thead>
+            <tr>
+                <th>رقم</th>
+                <th>الاسم</th>
+                <th>اليوم</th>
+                <th>الساعة</th>
+                <th>الحالة</th>
+                <th>التاريخ</th>
+            </tr>
+        </thead>
+        <tbody id="logTableBody"></tbody>
+    </table>
+    
+    <script>
+        function loadRecords() {
+            const records = JSON.parse(localStorage.getItem("attendance_records_Untitled-3")) || [];
+            const tableBody = document.getElementById("logTableBody");
+            tableBody.innerHTML = "";
+            
+            records.forEach((entry, index) => {
+                const row = document.createElement("tr");
+                row.innerHTML = `<td>${index + 1}</td><td>${entry.name}</td><td>${entry.day}</td><td>${entry.time}</td><td>${entry.status}</td><td>${entry.date}</td>`;
+                tableBody.appendChild(row);
+            });
+        }
+        
+        function downloadExcel() {
+            let csvContent = "\ufeffرقم,الاسم,اليوم,الساعة,الحالة,التاريخ\n";
+            const records = JSON.parse(localStorage.getItem("attendance_records_Untitled-3")) || [];
+            records.forEach((entry, index) => {
+                csvContent += `${index + 1},${entry.name},${entry.day},${entry.time},${entry.status},${entry.date}\n`;
+            });
+            
+            const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+            const link = document.createElement("a");
+            link.href = URL.createObjectURL(blob);
+            link.download = "سجل_الحضور_والانصراف.csv";
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function logout() {
+            localStorage.removeItem("username");
+            window.location.href = "index.html";
+        }
+        
+        window.onload = loadRecords;
+    </script>
+</body>
+</html>
