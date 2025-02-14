@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ar">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Egy-Survey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            text-align: center;
+            padding: 0;
+            margin: 0;
+        }
+        .header {
+            background-color: #0ca324;
+            color: white;
+            padding: 15px;
+            font-size: 20px;
+            font-weight: bold;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .login-container {
+            background: white;
+            padding: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            width: 315px;
+            margin: 155px auto;
+        }
+        input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 61px;
+        }
+        button {
+            width: 35%;
+            padding: 10px;
+            background-color: #15b638;
+            color: rgb(0, 0, 0);
+            border: none;
+            border-radius: 35px;
+            cursor: pointer;
+            transition: background-color 0.3s; 
+        }
+        button:hover {
+            background-color: #007bff; 
+        }
+        .error {
+            color: red;
+            margin-top: 10px;
+        }
+        .footer {
+            color: rgb(0, 0, 0);
+            padding: 10px;
+            font-size: 14px;
+            text-align: center;
+            position: absolute;
+            bottom: 0;
+            width: 100%;
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 20px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.2);
+            border-radius: 10px;
+            text-align: center;
+        }
+        .modal input {
+            display: block;
+            margin: 10px auto;
+        }
+    </style>
+</head>
+<body>
+
+    <div class="header">Egy-Survey</div> 
+
+    <div class="login-container">
+        <h2>تسجيل الدخول</h2>
+        <input type="text" id="username" placeholder="اسم المستخدم">
+        <input type="password" id="password" placeholder="كلمة المرور">
+        <button onclick="login()">تسجيل الدخول</button>
+        <p id="error-message" class="error"></p>
+    </div>
+    <div id="records-modal" class="modal">
+        <h3>تسجيل دخول المسؤول</h3>
+        <input type="text" id="admin-username" placeholder="اسم المستخدم">
+        <input type="password" id="admin-password" placeholder="كلمة المرور">
+        <button onclick="adminLogin()">دخول</button>
+        <p id="admin-error-message" class="error"></p>
+    </div>
+
+    <footer class="footer">&COPY; 2025 Egy-Survey. All rights reserved.</footer> 
+
+    <script>
+        function login() {
+            const users = {
+                "admin": "admin",
+                "MostafaOsama": "admin",
+                "user1": "pass1",
+                "user2": "pass2",
+                "Ahmed": "1234"
+            };
+
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            if (users[username] && users[username] === password) {
+                localStorage.setItem("username", username);
+                window.location.href = "Attendance.html";
+            } else {
+                document.getElementById("error-message").innerText = "اسم المستخدم أو كلمة المرور غير صحيحة!";
+            }
+        }
+
+        function showRecordsLogin() {
+            document.getElementById("records-modal").style.display = "block";
+        }
+    </script>
+
+</body>
+</html>
