@@ -141,32 +141,35 @@
             }
 
             function registerAttendance(status) {
-                let now = new Date();
-                let attendanceData = {
-                    name: username.split(" ").slice(0, 2).join(" "),
-                    day: new Intl.DateTimeFormat('ar-EG', { weekday: 'long' }).format(now),
-                    time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
-                    status: status,
-                    date: now.toLocaleDateString()
-                };
+    let now = new Date();
+    let attendanceData = {
+        name: username.split(" ").slice(0, 2).join(" "),
+        day: new Intl.DateTimeFormat('ar-EG', { weekday: 'long' }).format(now),
+        time: now.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
+        status: status,
+        date: now.toLocaleDateString()
+    };
 
-                // تحديث البيانات محليًا
-                let userRecords = JSON.parse(localStorage.getItem(getUserStorageKey())) || [];
-                userRecords.push(attendanceData);
-                localStorage.setItem(getUserStorageKey(), JSON.stringify(userRecords));
+    // تحديث البيانات محليًا
+    let userRecords = JSON.parse(localStorage.getItem(getUserStorageKey())) || [];
+    userRecords.push(attendanceData);
+    localStorage.setItem(getUserStorageKey(), JSON.stringify(userRecords));
 
-                addRowToTable(attendanceData);
+    addRowToTable(attendanceData);
 
-                // 🔹 إرسال البيانات إلى Google Sheets باستخدام fetch
-                fetch(GOOGLE_SHEET_URL, {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(attendanceData),
-                    mode: "no-cors" // تعطيل CORS لتجنب أخطاء المتصفح
-                })
-                .then(() => console.log("✅ البيانات أُرسلت بنجاح إلى Google Sheets"))
-                .catch(error => console.error("⚠️ Fetch Error:", error));
-            }
+    // 🔹 إرسال البيانات إلى Google Sheets باستخدام fetch
+    fetch(GOOGLE_SHEET_URL, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(attendanceData),
+        mode: "no-cors"
+    })
+    .then(() => {
+        console.log("✅ البيانات أُرسلت بنجاح إلى Google Sheets");
+        alert(`تم تسجيل ${status} بنجاح ✅`);
+    })
+    .catch(error => console.error("⚠️ Fetch Error:", error));
+}
 
             checkInButton.addEventListener("click", function() {
                 registerAttendance("حضور");
